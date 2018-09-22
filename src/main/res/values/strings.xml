@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">系统更新</string>
+
+    <string name="dialog_loading_default_title">加载中</string>
+    <string name="check_and_update">检查更新</string>
+
+    <string name="strUpdateDone">更新完成.</string>
+    <string name="strUserCancelInstall">已取消</string>
+    <string name="installer_view_title">安装</string>
+
+    <string name="strRunSetupScript">运行更新脚本</string>
+    <string name="strUnpacking">正在解压</string>
+    <string name="strPrepareInstaller">准备安装程序</string>
+</resources>
