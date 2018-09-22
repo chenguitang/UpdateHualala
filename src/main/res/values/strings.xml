@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">系统更新</string>
+    <string name="app_name">定制更新</string>
 
     <string name="dialog_loading_default_title">加载中</string>
     <string name="check_and_update">检查更新</string>

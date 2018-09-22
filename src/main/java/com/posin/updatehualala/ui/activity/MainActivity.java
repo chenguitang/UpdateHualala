@@ -6,12 +6,14 @@ import android.os.Build;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.AlertDialog;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
 import com.posin.updatehualala.R;
 import com.posin.updatehualala.base.BaseActivity;
+import com.posin.updatehualala.utils.AppCompanyUtils;
 import com.posin.updatehualala.utils.Proc;
 import com.posin.updatehualala.utils.StorageUtils;
 import com.posin.updatehualala.view.InstallerDialog;
@@ -42,6 +44,12 @@ public class MainActivity extends BaseActivity {
      * 检查是否需要分区，更新分区更新包
      */
     private static final int CHECK_UPDATE = 102;
+
+    /**
+     * 定制客户
+     */
+    private String systemCompanyName;
+
 
     Handler mHandler = new Handler() {
         @Override
@@ -77,10 +85,25 @@ public class MainActivity extends BaseActivity {
     @Override
     public void initData() {
 
+        try {
+            systemCompanyName = AppCompanyUtils.getSystemCompanyName();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @OnClick({R.id.btn_cancel_limit_install})
     public void onClick(View v) {
+
+        if (!TextUtils.isEmpty(systemCompanyName)) {
+            if (!systemCompanyName.equals("hualala")) {
+                Toast.makeText(this, "此功能只对部分定制客户有限，请确认您的机器.",
+                        Toast.LENGTH_SHORT).show();
+                return;
+            }
+        }
+
+
         showLoadingDialog("正在检查是否需要重新分区");
 
         mHandler.sendEmptyMessageDelayed(CHECK_UPDATE, 1000);
@@ -139,11 +162,11 @@ public class MainActivity extends BaseActivity {
 
         //DATA分区与Sdcard分区大小一致，说明已合并分区，无法重新分区
         if (sdcardSize > 1.5 && sdTotalSize.equals(StorageUtils.getRomTotalSize(this))) {
-            Toast.makeText(this, "DATA分区与SD卡分区已合并，无需重新分区.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "DATA分区与SDCARD分区已合并，无需重新分区.", Toast.LENGTH_SHORT).show();
             dismissLoadingDialog();
             return false;
         } else if (sdcardSize > 1) { //获取SD卡大小，如果大于1G，足够使用不需要重新分区
-            Toast.makeText(this, "SD卡大小大于1GB,无需重新分区.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "SDCARD分区已经是足够大, 无需重新分区.", Toast.LENGTH_SHORT).show();
             dismissLoadingDialog();
             return false;
         } else {
