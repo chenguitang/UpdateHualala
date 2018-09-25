@@ -155,17 +155,19 @@ public class MainActivity extends BaseActivity {
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR2)
     private boolean checkUpdate() {
 
-        String sdTotalSize = StorageUtils.getSDTotalSize(this);
+        long sdTotalSize = StorageUtils.getSDTotalSize();
         Log.d(TAG, "SD卡总大小为： " + StorageUtils.getSDTotalSize(this));
         Log.d(TAG, "机身内存总大小为： " + StorageUtils.getRomTotalSize(this));
-        double sdcardSize = Double.parseDouble(sdTotalSize.substring(0, sdTotalSize.length() - 3));
+//        double sdcardSize = Double.parseDouble(sdTotalSize.substring(0, sdTotalSize.length() - 3));
 
         //DATA分区与Sdcard分区大小一致，说明已合并分区，无法重新分区
-        if (sdcardSize > 1.5 && sdTotalSize.equals(StorageUtils.getRomTotalSize(this))) {
+        if (sdTotalSize > (1.5 * 1024 * 1024 * 1024) &&
+                sdTotalSize == StorageUtils.getRomTotalSize()) {
             Toast.makeText(this, "DATA分区与SDCARD分区已合并，无需重新分区.", Toast.LENGTH_SHORT).show();
             dismissLoadingDialog();
             return false;
-        } else if (sdcardSize > 1) { //获取SD卡大小，如果大于1G，足够使用不需要重新分区
+        } else if (sdTotalSize > (1024 * 1024 * 1024)) { //获取SD卡大小，如果大于1G，足够使用不需要重新分区
+            Log.e(TAG, "sdTotalSize-1024*1024= " + (sdTotalSize - 1024 * 1024));
             Toast.makeText(this, "SDCARD分区已经是足够大, 无需重新分区.", Toast.LENGTH_SHORT).show();
             dismissLoadingDialog();
             return false;
